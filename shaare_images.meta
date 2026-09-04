@@ -1,0 +1,4 @@
+description="Bilder per URL in Notizen einbinden: automatischer Download, lokale Zwischenspeicherung gegen Linkrot, zwei feste Größenstufen (klein/groß). Syntax: ![alt|small](url) oder ![alt|large](url), per Toolbar-Button einfügbar."
+parameters="SHAARE_IMAGES_WIDTH_SMALL;SHAARE_IMAGES_WIDTH_LARGE"
+parameter.SHAARE_IMAGES_WIDTH_SMALL="Bildbreite in Pixel für die Größenstufe 'small' (Standard: 250, leer lassen für Standard)"
+parameter.SHAARE_IMAGES_WIDTH_LARGE="Bildbreite in Pixel für die Größenstufe 'large' (Standard: 600, leer lassen für Standard)"

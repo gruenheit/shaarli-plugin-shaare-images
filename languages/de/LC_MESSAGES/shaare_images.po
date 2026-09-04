@@ -1,0 +1,58 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: shaare_images\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: ;shaare_images_t\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: shaare_images.php
+msgid "Insert image"
+msgstr "Bild einfügen"
+
+#: shaare_images.php
+msgid "Image URL"
+msgstr "Bild-URL"
+
+#: shaare_images.php
+msgid "Alt text (short description)"
+msgstr "Alt-Text (kurze Beschreibung)"
+
+#: shaare_images.php
+msgid "e.g. photo from the beach"
+msgstr "z. B. Foto vom Strand"
+
+#: shaare_images.php
+msgid "Size"
+msgstr "Größe"
+
+#: shaare_images.php
+msgid "Small"
+msgstr "Klein"
+
+#: shaare_images.php
+msgid "Large"
+msgstr "Groß"
+
+#: shaare_images.php
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: shaare_images.php
+msgid "Insert"
+msgstr "Einfügen"
+
+#: shaare_images.php
+msgid "Image is {w}×{h} px — fits both sizes."
+msgstr "Bild ist {w}×{h} px — passt für beide Größen."
+
+#: shaare_images.php
+msgid "Image is only {w}×{h} px — would be upscaled and blurry for \"{size}\" ({width} px)."
+msgstr "Bild ist nur {w}×{h} px — für „{size}“ ({width} px) würde es hochskaliert und unscharf wirken."
+
+#: shaare_images.php
+msgid "Not a valid image URL — image could not be loaded."
+msgstr "Keine gültige Bild-URL — Bild konnte nicht geladen werden."
