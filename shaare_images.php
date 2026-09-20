@@ -246,6 +246,7 @@ function shaare_images_process_html(string $html, ConfigManager $conf, ?string $
         function (array $m) use ($conf, $baseUrl): string {
             $width = shaare_images_width($m[3], $conf);
             $head = $baseUrl !== null ? shaare_images_absolutize_src($m[1], $baseUrl) : $m[1];
+            $head = shaare_images_collapse_double_slash($head);
 
             // $m[4] beginnt mit dem schliessenden Anfuehrungszeichen des alt-Attributs --
             // das setzen wir hier bereits manuell, daher substr() gegen ein doppeltes '"'.
@@ -270,6 +271,19 @@ function shaare_images_absolutize_src(string $tagHead, string $baseUrl): string
     );
 }
 
+/**
+ * Kollabiert einen doppelten Slash direkt nach der Domain in einer src-URL.
+ * Nicht unser Bug: Shaarli-Core haengt bei relativen Bildpfaden ("/cache/...")
+ * seinen eigenen index_url ohne rtrim davor (filterProtocols() in
+ * BookmarkMarkdownFormatter.php), das Ergebnis ist z. B. "https://8cy.de//cache/...".
+ * Auf Apache harmlos (Bild laedt trotzdem), aber ungueltiges Markup -- an dieser
+ * Stelle korrigierbar, weil wir das <img>-Tag hier ohnehin schon nachbearbeiten.
+ */
+function shaare_images_collapse_double_slash(string $tagHead): string
+{
+    return preg_replace('#(\bsrc="https?://[^/"]+)/{2,}#', '$1/', $tagHead);
+}
+
 function hook_shaare_images_render_linklist(array $data, ConfigManager $conf): array
 {
     foreach ($data['links'] as &$link) {
@@ -284,15 +298,21 @@ function hook_shaare_images_render_linklist(array $data, ConfigManager $conf): a
 
 function hook_shaare_images_render_daily(array $data, ConfigManager $conf): array
 {
-    foreach ($data['linksToDisplay'] as &$day) {
-        foreach ($day['links'] as &$link) {
-            if (!empty($link['description'])) {
-                $link['description'] = shaare_images_process_html($link['description'], $conf);
-            }
+    // Zwei eigenstaendige Fehlannahmen korrigiert (DailyController::index() im
+    // Shaarli-Core geprueft): (1) $data['linksToDisplay'] ist flach -- jeder
+    // Eintrag IST ein Bookmark, keine Tage-Gruppe mit verschachtelter
+    // 'links'-Liste. (2) Core tauscht auf dieser Seite bewusst die Felder:
+    // 'description' bleibt roh (Markdown, fuer eine Laengenberechnung an
+    // anderer Stelle), das tatsaechlich gerenderte HTML steckt in
+    // 'formatedDescription' -- genau das zeigt auch das Template
+    // (tpl/*/daily.html: {$link.formatedDescription}). Der Hook lief seit
+    // Plugin-Start ins Leere, weil er das falsche, unverarbeitete Feld traf.
+    foreach ($data['linksToDisplay'] as &$link) {
+        if (!empty($link['formatedDescription'])) {
+            $link['formatedDescription'] = shaare_images_process_html($link['formatedDescription'], $conf);
         }
-        unset($link);
     }
-    unset($day);
+    unset($link);
 
     return $data;
 }
