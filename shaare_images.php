@@ -229,8 +229,13 @@ function shaare_images_fetch(string $url): ?string
 /**
  * Ersetzt in bereits gerendertem Beschreibungs-HTML den Größenmarker im Alt-Text
  * durch ein echtes width-Attribut (Höhe folgt per CSS automatisch dem Seitenverhältnis).
+ *
+ * $baseUrl (optional): macht eine root-relative src (/cache/...) absolut. Nötig für
+ * Kontexte außerhalb der eigenen Seite (Atom/RSS-Feed, REST-API), wo eine relative
+ * URL sich nicht zuverlässig auflöst -- im normalen Linklist/Daily-Kontext bleibt
+ * die URL bewusst relativ (Domain-unabhängig, überlebt z. B. einen Domain-Umzug).
  */
-function shaare_images_process_html(string $html, ConfigManager $conf): string
+function shaare_images_process_html(string $html, ConfigManager $conf, ?string $baseUrl = null): string
 {
     if (strpos($html, '|small') === false && strpos($html, '|large') === false) {
         return $html;
@@ -238,14 +243,30 @@ function shaare_images_process_html(string $html, ConfigManager $conf): string
 
     return preg_replace_callback(
         SHAARE_IMAGES_HTML_PATTERN,
-        function (array $m) use ($conf): string {
+        function (array $m) use ($conf, $baseUrl): string {
             $width = shaare_images_width($m[3], $conf);
+            $head = $baseUrl !== null ? shaare_images_absolutize_src($m[1], $baseUrl) : $m[1];
 
-            return $m[1] . $m[2] . '"'
+            // $m[4] beginnt mit dem schliessenden Anfuehrungszeichen des alt-Attributs --
+            // das setzen wir hier bereits manuell, daher substr() gegen ein doppeltes '"'.
+            return $head . $m[2] . '"'
                 . ' width="' . $width . '" style="height:auto;max-width:100%;"'
-                . $m[4];
+                . substr($m[4], 1);
         },
         $html
+    );
+}
+
+/**
+ * Macht eine root-relative img-src ("/cache/...") innerhalb des <img>-Tag-Anfangs absolut.
+ * Bereits absolute URLs (http/https) bleiben unangetastet.
+ */
+function shaare_images_absolutize_src(string $tagHead, string $baseUrl): string
+{
+    return preg_replace(
+        '/(\bsrc=")\/(?!\/)/',
+        '$1' . rtrim($baseUrl, '/') . '/',
+        $tagHead
     );
 }
 
@@ -272,6 +293,24 @@ function hook_shaare_images_render_daily(array $data, ConfigManager $conf): arra
         unset($link);
     }
     unset($day);
+
+    return $data;
+}
+
+/**
+ * Atom/RSS-Feed: gleiche Verarbeitung wie render_linklist/render_daily, zusätzlich
+ * mit absoluter src -- Feed-Abonnenten lesen außerhalb des Seitenkontexts.
+ */
+function hook_shaare_images_render_feed(array $data, ConfigManager $conf): array
+{
+    $baseUrl = $data['index_url'] ?? null;
+
+    foreach ($data['links'] as &$link) {
+        if (!empty($link['description'])) {
+            $link['description'] = shaare_images_process_html($link['description'], $conf, $baseUrl);
+        }
+    }
+    unset($link);
 
     return $data;
 }
