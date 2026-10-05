@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Collapsed "How does this work?" hint in the insert dialog: the image is copied on save, Small/Large only set the display width, deleting the original does not remove the copy. German translation included.
+
 ### Fixed
 
 - Atom/RSS feed subscribers used to see the raw, unprocessed `|small`/`|large` size marker literally in the alt text, and no `width`/`height` styling — the `render_linklist`/`render_daily` hooks never ran on feed output. Added a `render_feed` hook doing the same processing.

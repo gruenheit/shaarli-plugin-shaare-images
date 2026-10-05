@@ -103,7 +103,14 @@ function hook_shaare_images_render_editlink(array $data, ConfigManager $conf): a
         $small,
         $large,
         shaare_images_t('Cancel'),
-        shaare_images_t('Insert')
+        shaare_images_t('Insert'),
+        shaare_images_t('How does this work?'),
+        shaare_images_t(
+            'Paste the address of an image. When you save the note, Shaarli downloads it and keeps its own copy, '
+            . 'so it stays visible even if the original disappears.'
+        ),
+        shaare_images_t('Small and Large only set the display width; the file itself is not resized.'),
+        shaare_images_t('Deleting the original does not remove Shaarli\'s copy.')
     );
     $data['edit_link_plugin'][] = $html;
 

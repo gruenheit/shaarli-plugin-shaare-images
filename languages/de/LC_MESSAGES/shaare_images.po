@@ -56,3 +56,19 @@ msgstr "Bild ist nur {w}×{h} px — für „{size}“ ({width} px) würde es ho
 #: shaare_images.php
 msgid "Not a valid image URL — image could not be loaded."
 msgstr "Keine gültige Bild-URL — Bild konnte nicht geladen werden."
+
+#: shaare_images.php
+msgid "How does this work?"
+msgstr "Wie funktioniert das?"
+
+#: shaare_images.php
+msgid "Paste the address of an image. When you save the note, Shaarli downloads it and keeps its own copy, so it stays visible even if the original disappears."
+msgstr "Füge die Adresse eines Bildes ein. Beim Speichern der Notiz lädt Shaarli es herunter und behält eine eigene Kopie, sodass es auch sichtbar bleibt, wenn das Original verschwindet."
+
+#: shaare_images.php
+msgid "Small and Large only set the display width; the file itself is not resized."
+msgstr "Klein und Groß legen nur die Anzeigebreite fest; die Datei selbst wird nicht verkleinert."
+
+#: shaare_images.php
+msgid "Deleting the original does not remove Shaarli's copy."
+msgstr "Das Löschen des Originals entfernt die Kopie in Shaarli nicht."

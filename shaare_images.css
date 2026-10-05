@@ -143,3 +143,17 @@
     color: var(--text-muted, #707070);
     cursor: not-allowed;
 }
+
+#shaare-images-form .shaare-images-help {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--text-secondary, #b0b0b0);
+}
+
+#shaare-images-form .shaare-images-help summary {
+    cursor: pointer;
+}
+
+#shaare-images-form .shaare-images-help p {
+    margin: 6px 0 0;
+}
